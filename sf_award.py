@@ -105,18 +105,17 @@ def sf_award(username,password,grant,source,country,status,date,donor,
     base_obj['Likelihood__c'] = "Tier 3 - <70%"
 
 
+  #Get OAuth2 Access Token and SF Instance URL
   f = open('sf_creds.json')
   creds = json.load(f)  
   url = "https://test.salesforce.com/services/oauth2/token"
   response = requests.post(f"{url}", data=creds)
   access_token = response.json().get("access_token")
   instance_url = response.json().get("instance_url")
+  
+  #Post New Award with Access Token to SF
   endpoint_award = "/services/data/v31.0/sobjects/Future_Gift__c"
   payload_award = json.dumps(base_obj, cls=NpEncoder)
-  with open("output.json", "w") as outfile:
-    outfile.write(payload_award)
   response = requests.post(f"{instance_url}{endpoint_award}",headers={'Content-type':'application/json', "Authorization":"Bearer " + access_token}, data=payload_award)
-  print(response.json())
   sf_url = instance_url + "/lightning/r/Future_Gift__c/" + response.json()['id'] + "/view"
-
   return sf_url
