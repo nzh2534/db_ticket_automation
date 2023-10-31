@@ -20,7 +20,7 @@ file_path = str(Path.home() / "Downloads") + "\\"
 from file_and_sf import file_and_update
 from upload_attachments import upload_attachments
 from create_tickets import create_tickets
-from gs_reassemble_test import google_sheet_clean
+from gs_reassemble import google_sheet_clean
 from opp_prioritization_fxn import opp_prioritization_fxn
 
 import os
@@ -87,7 +87,7 @@ google_user = input("What is your Email?: ")
 google_pass = input("What is your Password?: ")
 reformat_sheet = input("\nReformat Sheet? y for yes, otherwise press enter to run the program: ")
 if reformat_sheet == "y":
-    google_sheet_clean(df_criteria,creds,sheet_name_results,client,os.environ.get("UPLOAD_ID"))
+    google_sheet_clean(df_criteria,creds,sheet_name_results,client, os.environ.get("UPLOAD_ID"))
     input("\nThe sheet has been reformatted, press Enter to begin...")
 
 y = 0 # Variable used to iterate through FH OPP FORM RESULTS, y changes row
