@@ -1,30 +1,3 @@
-# Is Food for the Hungry an Incumbent or partnering with an incumbent?
-# Yes
-
-# Is this a follow on opportunity?
-# Yes
-
-# Does the country office have experience working with the donor?
-# Yes
-
-# How long will the project last (in months)
-# 36
-
-# What is the opportunity budget?
-# 25000000
-
-# Do we have evidence based approaches and models for this opportunity?
-# Yes
-
-# Does the opportunity align with country office sector and sub sector priorities?
-# Yes
-
-# Will FH be submitting a Concept Note, Full Proposal, EOI, or a Cost Extension? Or is this unknown?
-# Full Proposal
-
-# Does the country office have the technical capacity to design and submit this opportunity?
-# The GSC is leading technical design and writing
-
 # Incumbent? 
 # Follow on?
 # Donor experience?

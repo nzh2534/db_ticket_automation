@@ -1,30 +1,5 @@
-# import gspread
-# from oauth2client.service_account import ServiceAccountCredentials
-
-# import pandas as pd
-
 import requests
 import datetime
-
-# # ----------------------- For Testing ----------------------------------
-# creds_json = "googlesheets.json"
-# sheet_name_results = "FH OPP FORM RESULTS" #For Form Results Used to Filter Staff List
-# sheet_name_staff = "FH STAFF FOR TICKETS"
-
-# scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-# creds = ServiceAccountCredentials.from_json_keyfile_name(creds_json,scope)
-# client = gspread.authorize(creds)
-
-# #Data Frame for Criteria that will filter Staff
-# sheet = client.open(sheet_name_results).sheet1
-# criteria_list = sheet.get_all_records()
-# df_criteria = pd.DataFrame(criteria_list)
-
-# #Data Frame for Staff
-# sheet = client.open(sheet_name_staff).sheet1
-# staff_list = sheet.get_all_records()
-# df_staff = pd.DataFrame(staff_list)
-
 import os
 from dotenv import load_dotenv, find_dotenv
 
