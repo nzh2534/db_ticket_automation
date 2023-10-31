@@ -2,6 +2,17 @@ import json
 import requests
 import numpy as np
 
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+RECORD_ID = os.environ.get("RECORD_ID")
+TOKEN_URL = os.environ.get("TOKEN_URL")
+ENDPOINT_AWARD = os.environ.get("ENDPOINT_AWARD")
+ENDPOINT_ACCOUNT = os.environ.get("ENDPOINT_ACCOUNT")
+ENDPOINT_AREA = os.environ.get("ENDPOINT_AREA")
+
 class NpEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.integer):
@@ -11,38 +22,37 @@ class NpEncoder(json.JSONEncoder):
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         return super(NpEncoder, self).default(obj)
-    
-sf_area = {
-        'Bangladesh':'a2S8W000003n5VbUAI',
-        'Bolivia':'a2S8W000003n5VMUAY',
-        'Burundi':'a2S8W000003n5VSUAY',
-        'Cambodia':'a2S8W000003n5VYUAY',
-        'Democratic Republic of the Congo':'a2S8W000003n5VTUAY',
-        'Dominican Republic':'a2S8W000003n5VKUAY',
-        'Ethiopia':'a2S8W000003n5VQUAY',
-        'Guatemala':'a2S8W000003n5VNUAY',
-        'Haiti':'a2S8W000003n5VJUAY',
-        'Indonesia':'a2S8W000003n5VaUAI',
-        'Kenya':'a2S8W000003n5VUUAY',
-        'Mozambique':'a2S8W000003n5VVUAY',
-        'Nicaragua':'a2S8W000003n5VOUAY',
-        'Peru':'a2S8W000003n5VLUAY',
-        'Philippines':'a2S8W000003n5VZUAY',
-        'Rwanda':'a2S8W000003n5VWUAY',
-        'South Sudan':'a2S8W000003n5VPUAY',
-        'Uganda':'a2S8W000003n5VRUAY',
-        'United States': 'a2S8W000003n5VeUAI'
-        }
 
-def sf_award(username,password,grant,source,country,status,date,donor,
-                    budget,desc,funding_type,funding_office,submission_type,ticket_id,
-                    app_id,resilience_check,due_date,match,submitted_var,months,ceiling,
-                    start_date,role,opp_type,primary_sect,donor_abbr,opp_abbr,likelihood,award_type,sect_list):
+def file_and_update(username,password,grant,source,country,status,date,donor,budget,desc,funding_type,funding_office,submission_type,ticket_id,app_id,resilience_check,due_date,match,submitted_var,months,ceiling,start_date,role,opp_type,primary_sect,donor_abbr,opp_abbr,likelihood,award_type,sect_list):
+  f = open('sf_creds.json')
+  creds = json.load(f)
+  response = requests.post(f"{TOKEN_URL}", data=creds)
+  access_token = response.json().get("access_token")
+  instance_url = response.json().get("instance_url")
+
+  def lookup(field, endpoint, url_break):
+    response = requests.get(f"{instance_url}{endpoint}",headers={'Content-type':'application/json', "Authorization":"Bearer " + access_token})
+    account_dict = {}
+    for i in response.json()['records']:
+        account_dict[i['Name'].lower()] = i['attributes']['url']
+
+    account_check = True
+    while account_check:
+        if field.lower() in account_dict.keys():
+            account_check = False
+        else:
+            print(f"Not an {url_break} {field}")
+            field = input(f"Input a new {url_break}: ")
+
+    return account_dict[field.lower()].split(url_break + "/")[1]
   
-  base_obj = {"RecordTypeId": "0128W000001HrRaQAK"}
-
-  base_obj['Geographic_Location__c'] = sf_area[country]
-  base_obj['Account__c'] = "001Ou000004X2dSIAS" #Need to update in prod
+  country_lookup = lookup(country, ENDPOINT_AREA, "Area__c")
+  account_lookup = lookup(donor, ENDPOINT_ACCOUNT, "Account")
+      
+       
+  base_obj = {"RecordTypeId": RECORD_ID}
+  base_obj['Geographic_Location__c'] = country_lookup
+  base_obj['Account__c'] = account_lookup
 
   base_obj["Name"] = grant
   base_obj["Short_Name__c"] = grant
@@ -104,18 +114,15 @@ def sf_award(username,password,grant,source,country,status,date,donor,
   else:
     base_obj['Likelihood__c'] = "Tier 3 - <70%"
 
-
-  #Get OAuth2 Access Token and SF Instance URL
-  f = open('sf_creds.json')
-  creds = json.load(f)  
-  url = "https://test.salesforce.com/services/oauth2/token"
-  response = requests.post(f"{url}", data=creds)
-  access_token = response.json().get("access_token")
-  instance_url = response.json().get("instance_url")
-  
-  #Post New Award with Access Token to SF
-  endpoint_award = "/services/data/v31.0/sobjects/Future_Gift__c"
   payload_award = json.dumps(base_obj, cls=NpEncoder)
-  response = requests.post(f"{instance_url}{endpoint_award}",headers={'Content-type':'application/json', "Authorization":"Bearer " + access_token}, data=payload_award)
+  with open("output.json", "w") as outfile:
+    outfile.write(payload_award)
+  response = requests.post(f"{instance_url}{ENDPOINT_AWARD}",headers={'Content-type':'application/json', "Authorization":"Bearer " + access_token}, data=payload_award)
+  print(response.json())
   sf_url = instance_url + "/lightning/r/Future_Gift__c/" + response.json()['id'] + "/view"
-  return sf_url
+
+  return ["Salesforce: " + sf_url,"<br>\n\nGoogle Drive Folder: ##"]
+
+# file_and_update("nhaglund@fh.org","Noelha44!!!!",opp_name,identified_at_level,countries_orig,whisper_or_development,today.strftime("%Y/%m/%d"),donor,str(budget_orig),opp_desc,funding_type,"Field",opp_type_var,\
+#     ticket_id,approvals_id,resilience_check,due_date_orig,match,submitted_var,str(project_length),str(budget_ceiling),\
+#     start_date,fh_role,type_var_orig,sectors_orig,)
