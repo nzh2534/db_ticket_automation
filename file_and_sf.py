@@ -24,6 +24,45 @@ class NpEncoder(json.JSONEncoder):
         return super(NpEncoder, self).default(obj)
 
 def file_and_update(username,password,grant,source,country,status,date,donor,budget,desc,funding_type,funding_office,submission_type,ticket_id,app_id,resilience_check,due_date,match,submitted_var,months,ceiling,start_date,role,opp_type,primary_sect,donor_abbr,opp_abbr,likelihood,award_type,sect_list):
+  """
+    Handles file creation and Salesforce updates for the given opportunity.
+
+    Parameters:
+    google_user (str): Google account username.
+    google_pass (str): Google account password.
+    opp_name (str): Name of the opportunity.
+    identified_at_level (str): Level at which the opportunity was identified.
+    countries_orig (str): Original countries involved in the opportunity.
+    whisper_or_development (str): Indicates if the opportunity is a whisper or development.
+    today (str): Current date.
+    donor (str): Name of the donor.
+    budget_orig (float): Original budget of the project.
+    opp_desc (str): Description of the opportunity.
+    funding_type (str): Type of funding.
+    funding_office (str): Office receiving the funding.
+    opp_type_var (str): Type of opportunity (Concept Note, Full Proposal, etc.).
+    ticket_id (int): ID of the coordination ticket.
+    approvals_id (int): ID of the approvals ticket.
+    resilience_check (str): Indicates if the opportunity incorporates resilience.
+    due_date_orig (str): Original due date of the opportunity.
+    match (str): Indicates if match is required.
+    submitted_var (str): Indicates if the opportunity has been submitted.
+    project_length_orig (str): Original length of the project.
+    budget_ceiling (float): Estimated budget ceiling.
+    start_date (str): Estimated start date of the project.
+    fh_role (str): Role of FH in the opportunity (Prime, Sub, etc.).
+    type_var_orig (str): Original type of the opportunity (Relief or Development).
+    sectors_orig (list): Original sectors involved in the opportunity.
+    donor_abbr (str): Abbreviation for the donor.
+    opp_abbr (str): Abbreviation for the opportunity.
+    priority (int): Priority of the opportunity.
+    award_type (str): Type of award.
+    sectors (list): Sectors involved in the opportunity.
+
+    Returns:
+    list: A list containing the Google file string and Salesforce entry string.
+  
+  """
   f = open('sf_creds.json')
   creds = json.load(f)
   response = requests.post(f"{TOKEN_URL}", data=creds)

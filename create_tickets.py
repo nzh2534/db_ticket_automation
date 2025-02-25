@@ -17,6 +17,21 @@ WHISPER_STA = os.environ.get("WHISPER_STA")
 
 
 def create_tickets(df_criteria,y,df_staff,donor_abbr,for_testing, auth_user, auth_pass):
+    """
+    Creates JitBit tickets based on the provided criteria and staff data.
+
+    Parameters:
+    df_criteria (DataFrame): DataFrame containing the criteria for ticket creation.
+    y (int): Index of the current row in df_criteria.
+    df_staff (DataFrame): DataFrame containing staff information.
+    donor_abbr (str): Abbreviation for the donor.
+    for_testing (bool): Flag indicating if the function is being run for testing purposes.
+    auth_user (str): Username for authentication.
+    auth_pass (str): Password for authentication.
+
+    Returns:
+    list: A list containing the coordination ticket ID, approvals ticket ID, and a list of approval IDs.
+    """
 
     country_abbr = {
         'Bangladesh':'BAN',

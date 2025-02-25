@@ -1,4 +1,20 @@
 def upload_attachments(ticket_id, attachments,origin_path, approvals_id, auth_user, auth_pass, url, endpoint_attach):
+    """
+    Uploads attachments to the specified ticket and approvals in JitBit.
+
+    Parameters:
+    ticket_id (str): ID of the ticket to upload attachments to.
+    attachments (str): Comma-separated list of Google Drive links to the attachments.
+    origin_path (str): Local path to the directory containing the downloaded attachments.
+    approvals_id (str): ID of the approvals ticket to upload attachments to.
+    auth_user (str): Username for authentication.
+    auth_pass (str): Password for authentication.
+    url (str): Base URL for the JitBit API.
+    endpoint_attach (str): Endpoint for uploading attachments in the JitBit API.
+
+    Returns:
+    None
+    """
     import requests
 
     def get_id(link):

@@ -2,6 +2,19 @@ import pandas as pd
 from df2gspread import df2gspread as d2g
 
 def google_sheet_clean(df_criteria,gs_creds,sheet_name_results,client, upload_id):
+    """
+    Cleans and updates a Google Sheet based on the provided criteria DataFrame.
+
+    Parameters:
+    df_criteria (DataFrame): DataFrame containing the criteria for cleaning and updating the Google Sheet.
+    gs_creds (Credentials): Google Sheets API credentials.
+    sheet_name_results (str): Name of the Google Sheet to update.
+    client (gspread.Client): Authenticated gspread client.
+    upload_id (str): ID of the Google Sheet to upload the cleaned data to.
+
+    Returns:
+    None
+    """
     replace_blanks = []
     for i in df_criteria["Select a Country This Opportunity Applies To"]:
         if i == "":

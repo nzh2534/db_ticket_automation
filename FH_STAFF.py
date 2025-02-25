@@ -330,7 +330,6 @@ while y < (df_results_length):
     #-----------------Add attachments to Coordination/Main Ticket ---------------------------------
     attachments = df_criteria["Please upload relevant attachments"][y]
 
-    # --------------------------------------  Need to fix attachment bug -------------------------------------------------
     if attachments != "":
         upload_attachments(ticket_id, attachments,file_path,approvals_id, AUTH_USER, AUTH_PASS, url, endpoint_attach)
 
