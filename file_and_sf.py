@@ -122,7 +122,3 @@ def file_and_update(username,password,grant,source,country,status,date,donor,bud
   sf_url = instance_url + "/lightning/r/Future_Gift__c/" + response.json()['id'] + "/view"
 
   return ["Salesforce: " + sf_url,"<br>\n\nGoogle Drive Folder: ##"]
-
-# file_and_update("nhaglund@fh.org","Noelha44!!!!",opp_name,identified_at_level,countries_orig,whisper_or_development,today.strftime("%Y/%m/%d"),donor,str(budget_orig),opp_desc,funding_type,"Field",opp_type_var,\
-#     ticket_id,approvals_id,resilience_check,due_date_orig,match,submitted_var,str(project_length),str(budget_ceiling),\
-#     start_date,fh_role,type_var_orig,sectors_orig,)
