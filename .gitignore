@@ -51,3 +51,5 @@ Thumbs.db
 #Secrets
 *.json
 *.env
+
+salesforce_api_TESTING_ONLY.py
